@@ -1,0 +1,10 @@
+boto
+boto3
+botocore
+
+[dev]
+check-manifest
+
+[test]
+coverage
+nose
