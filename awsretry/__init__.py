@@ -106,6 +106,9 @@ class AWSRetry(CloudRetry):
         elif isinstance(error, boto.compat.StandardError):
             return boto.compat.StandardError
 
+        elif isinstance(error, botocore.exceptions.WaiterError):
+            return botocore.exceptions.WaiterError
+
         else:
             return type(None)
 
@@ -113,6 +116,8 @@ class AWSRetry(CloudRetry):
     def status_code_from_exception(error):
         if isinstance(error, botocore.exceptions.ClientError):
             return error.response['Error']['Code']
+        if isinstance(error, botocore.exceptions.WaiterError):
+            return error.last_response['Error']['Code']
         else:
             return error.error_code
 
