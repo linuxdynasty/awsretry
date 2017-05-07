@@ -6,7 +6,7 @@ here = path.abspath(path.dirname(__file__))
 setup(
     name='awsretry',
 
-    version='1.0.0',
+    version='1.0.2',
 
     description='Decorate your AWS Boto3 Calls with AWSRetry.backoff(). This will allows your calls to get around the AWS Eventual Consistency Errors.',
     long_description=open('README.rst').read(),

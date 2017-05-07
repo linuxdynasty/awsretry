@@ -12,7 +12,7 @@ import boto
 import boto3
 
 __author__ = 'Allen Sanabria'
-__version__ = '1.0.0'
+__version__ = '1.0.2'
 
 
 class CloudRetry(object):
