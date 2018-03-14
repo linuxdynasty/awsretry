@@ -14,8 +14,6 @@ import boto3
 __author__ = 'Allen Sanabria'
 __version__ = '1.0.2'
 
-logging.basicConfig(level=logging.INFO)
-
 class CloudRetry(object):
     """ CloudRetry can be used by any cloud provider, in order to implement a
         backoff algorithm/retry effect based on Status Code from Exceptions.
