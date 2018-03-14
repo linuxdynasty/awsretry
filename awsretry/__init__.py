@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 from functools import wraps
 import re
-import syslog
+import logging
 import time
 
 import botocore
@@ -74,11 +74,7 @@ class CloudRetry(object):
                         if isinstance(e, base_exception_class):
                             response_code = cls.status_code_from_exception(e)
                             if cls.found(response_code, added_exceptions):
-                                msg = (
-                                    "{0}: Retrying in {1} seconds..."
-                                    .format(str(e), max_delay)
-                                )
-                                syslog.syslog(syslog.LOG_INFO, msg)
+                                logging.info("%s: Retrying in %d seconds..." % (str(e), max_delay))
                                 time.sleep(max_delay)
                                 max_tries -= 1
                                 max_delay *= backoff
