@@ -75,7 +75,7 @@ class CloudRetry(object):
                         if isinstance(e, base_exception_class):
                             response_code = cls.status_code_from_exception(e)
                             if cls.found(response_code, added_exceptions):
-                                logging.info("%s: Retrying in %d seconds..." % (str(e), max_delay))
+                                logging.warning("%s: Retrying in %d seconds..." % (str(e), max_delay))
                                 time.sleep(max_delay)
                                 max_tries -= 1
                                 max_delay *= backoff
