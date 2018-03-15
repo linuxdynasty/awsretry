@@ -61,7 +61,7 @@ Write a quick function that implements AWSRetry.backoff()
             instances = client.describe_instances()
             return instances
         except botocore.exceptions.ClientError as e:
-            raise e:
+            raise e
 
     instances = get_instances()
 
@@ -81,10 +81,10 @@ Write a quick function that will overwrite the default arguments.
       client = boto3.client('ec2')
       try:
           resources = ['1-12345678891234']
-          tags = [{'Key': 'service'}, {'Value': 'web-app'}]
-          instances = client.create_tags(Resources=resources)
+          tags = [{'Key': 'service', 'Value': 'web-app'}]
+          instances = client.create_tags(Resources=resources, Tags=tags)
       except botocore.exceptions.ClientError as e:
-          raise e:
+          raise e
 
   create_tags()
 
