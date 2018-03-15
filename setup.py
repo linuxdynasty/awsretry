@@ -37,6 +37,7 @@ setup(
 
     install_requires=['boto', 'boto3', 'botocore'],
     tests_require=['coverage', 'nose', 'tox'],
+    test_suite='nose.collector',
 
     extras_require={
         'dev': ['check-manifest'],
