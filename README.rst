@@ -107,12 +107,14 @@ the ``pip install awsretry`` defined above:
 Running Tests
 -------------
 
-You can run the tests by using tox which implements nosetest or run them
-directly using nosetest.
+You can run the tests by using `tox` which implements nosetest:
 
 .. code-block:: sh
 
     $ tox
-    $ tox tests/test_awsretry.py
-    $ tox -e py27,py36 tests/
-    $ nosetest
+
+Alternatively, you can run them directly using `nosetests`:
+
+.. code-block:: sh
+
+    $ nosetests

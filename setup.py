@@ -36,9 +36,10 @@ setup(
     keywords='boto3 aws retry awsretry backoff',
 
     install_requires=['boto', 'boto3', 'botocore'],
+    tests_require=['coverage', 'nose', 'tox'],
+    test_suite='nose.collector',
 
     extras_require={
         'dev': ['check-manifest'],
-        'test': ['coverage', 'nose'],
     },
 )

@@ -4,16 +4,17 @@ from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 from functools import wraps
 import re
-import syslog
+import logging
 import time
 
 import botocore
 import boto
 import boto3
 
+log = logging.getLogger('awsretry')
+
 __author__ = 'Allen Sanabria'
 __version__ = '1.0.2'
-
 
 class CloudRetry(object):
     """ CloudRetry can be used by any cloud provider, in order to implement a
@@ -74,11 +75,7 @@ class CloudRetry(object):
                         if isinstance(e, base_exception_class):
                             response_code = cls.status_code_from_exception(e)
                             if cls.found(response_code, added_exceptions):
-                                msg = (
-                                    "{0}: Retrying in {1} seconds..."
-                                    .format(str(e), max_delay)
-                                )
-                                syslog.syslog(syslog.LOG_INFO, msg)
+                                log.warning("%s: Retrying in %d seconds..." % (str(e), max_delay))
                                 time.sleep(max_delay)
                                 max_tries -= 1
                                 max_delay *= backoff
