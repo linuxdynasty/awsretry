@@ -114,8 +114,9 @@ class AWSRetry(CloudRetry):
             return error.response['Error']['Code']
         if isinstance(error, botocore.exceptions.WaiterError):
             return error.last_response['Error']['Code']
-        else:
+        elif hasattr(error, 'error_code'):
             return error.error_code
+        return error.__class__.__name__
 
     @staticmethod
     def found(response_code, added_exceptions):
