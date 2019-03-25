@@ -123,7 +123,8 @@ class AWSRetry(CloudRetry):
         # http://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html
         retry_on = [
             'RequestLimitExceeded', 'Unavailable', 'ServiceUnavailable',
-            'InternalFailure', 'InternalError'
+            'InternalFailure', 'InternalError', 'LimitExceededException',
+            'TooManyRequestsException', 'ThrottlingException'
         ]
         retry_on.extend(added_exceptions)
 
