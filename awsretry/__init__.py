@@ -4,7 +4,10 @@ from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 from functools import wraps
 import re
-import logging
+try:
+    from loguru import logger as logging
+except:
+    import logging
 import time
 
 import botocore
