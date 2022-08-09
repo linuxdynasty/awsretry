@@ -62,6 +62,48 @@ class RetryTestCase(unittest.TestCase):
 
         self.assertEqual(self.counter, 1)
 
+    def test_excluded_exception_does_not_retry(self):
+        self.counter = 0
+        err_msg = {'Error': {'Code': 'ResourceNotFoundException'}}
+
+        @AWSRetry.backoff(tries=4, delay=0.1, excluded_exceptions=['ResourceNotFoundException'])
+        def raise_excluded_error():
+            self.counter += 1
+            raise botocore.exceptions.ClientError(err_msg, 'excluded')
+
+        with self.assertRaises(botocore.exceptions.ClientError):
+            raise_excluded_error()
+
+        self.assertEqual(self.counter, 1)
+
+    def test_excluded_exception_retry_for_non_match(self):
+        self.counter = 0
+        err_msg = {'Error': {'Code': 'InstanceId.NotFound'}}
+
+        @AWSRetry.backoff(tries=4, delay=0.1, excluded_exceptions=['ResourceNotFoundException'])
+        def raise_excluded_error_no_match():
+            self.counter += 1
+            raise botocore.exceptions.ClientError(err_msg, 'excluded_not_match')
+
+        with self.assertRaises(botocore.exceptions.ClientError):
+            raise_excluded_error_no_match()
+
+        self.assertEqual(self.counter, 4)
+
+    def test_excluded_core_exception_does_not_retry(self):
+        self.counter = 0
+        err_msg = {'Error': {'Code': 'InternalFailure'}}
+
+        @AWSRetry.backoff(tries=4, delay=0.1, excluded_exceptions=['InternalFailure'])
+        def raise_excluded_core_error():
+            self.counter += 1
+            raise botocore.exceptions.ClientError(err_msg, 'excluded_core')
+
+        with self.assertRaises(botocore.exceptions.ClientError):
+            raise_excluded_core_error()
+
+        self.assertEqual(self.counter, 1)
+
 
 if __name__ == '__main__':
     unittest.main()
