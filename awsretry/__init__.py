@@ -47,7 +47,7 @@ class CloudRetry(object):
         pass
 
     @classmethod
-    def backoff(cls, tries=10, delay=3, backoff=1.1, added_exceptions=list()):
+    def backoff(cls, tries=10, delay=3, backoff=1.1, added_exceptions=list(), excluded_exceptions=list()):
         """ Retry calling the Cloud decorated function using an exponential
             backoff.
         Kwargs:
@@ -59,6 +59,8 @@ class CloudRetry(object):
                 delay each retry.
                 default=2
             added_exceptions (list): Other exceptions to retry on.
+                default=[]
+            excluded_exceptions (list): Exceptions not to retry on.
                 default=[]
 
         """
@@ -73,7 +75,7 @@ class CloudRetry(object):
                         base_exception_class = cls.base_class(e)
                         if isinstance(e, base_exception_class):
                             response_code = cls.status_code_from_exception(e)
-                            if cls.found(response_code, added_exceptions):
+                            if cls.found(response_code, added_exceptions, excluded_exceptions):
                                 logging.info("{0}: Retrying in {1} seconds...".format(str(e), max_delay))
                                 time.sleep(max_delay)
                                 max_tries -= 1
@@ -119,7 +121,11 @@ class AWSRetry(CloudRetry):
         return error.__class__.__name__
 
     @staticmethod
-    def found(response_code, added_exceptions):
+    def found(response_code, added_exceptions, excluded_exceptions):
+        # If the response_code is in the excluded list return immediately
+        if response_code in excluded_exceptions:
+            return False
+
         # This list of failures is based on this API Reference
         # http://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html
         retry_on = [
